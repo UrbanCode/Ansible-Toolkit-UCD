@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    © Copyright IBM Corporation 2017.
+    This is licensed under the following license.
+    The Eclipse Public 1.0 License (http://www.eclipse.org/legal/epl-v10.html)
+    U.S. Government Users Restricted Rights:  Use, duplication or disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
+-->
+
+<plugin-upgrade
+        xmlns="http://www.urbancode.com/UpgradeXMLSchema_v1"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+
+    <migrate to-version="52">
+        <migrate-command name="Apt" old="apt"/>
+        <migrate-command name="Apt Key" old="apt_key"/>
+        <migrate-command name="Line In File" old="lineinfile"/>
+        <migrate-command name="Copy" old="copy"/>
+        <migrate-command name="Command" old="command"/>
+        <migrate-command name="Pip" old="pip"/>
+        <migrate-command name="Shell" old="shell"/>
+        <migrate-command name="Service" old="service"/>
+        <migrate-command name="File" old="file"/>
+        <migrate-command name="Unarchive" old="unarchive"/>
+        <migrate-command name="Get Url" old="get_url"/>
+        <migrate-command name="Get Built-in Ansible Properties" old="getBuiltinAnsibleProperties"/>
+    </migrate>
+</plugin-upgrade>
