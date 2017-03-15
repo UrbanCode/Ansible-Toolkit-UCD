@@ -1,0 +1,783 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    © Copyright IBM Corporation 2017.
+    This is licensed under the following license.
+    The Eclipse Public 1.0 License (http://www.eclipse.org/legal/epl-v10.html)
+    U.S. Government Users Restricted Rights:  Use, duplication or disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
+-->
+
+<plugin xmlns="http://www.urbancode.com/PluginXMLSchema_v1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <header>
+    <identifier id="com.urbancode.air.plugin.AnsibleToolkit" name="AnsibleToolkit" version="52"/>
+    <description>
+      This plug-in includes steps that integrate with Ansible.
+      </description>
+    <tag>Toolkit/Ansible</tag>
+  </header>
+  <step-type name="AShell">
+    <description>Automation shell using raw Ansible step script</description>
+    <properties>
+            <property name="script" required="true">
+                <property-ui type="textAreaBox" label="script" description="Ansible-styple script"/>
+            </property>
+        </properties>
+    <post-processing><![CDATA[
+		var exit = properties.get('exitCode');
+		if (exit == 0) {
+			scanner.register("FAILED! =>", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.register("failed:", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.register("The error appears", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.register("ERROR:", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.scan();
+			if (exit!=0) {
+			 	var errors = properties.get("Error");
+		        if (errors == null) {
+		            errors = new java.util.ArrayList();
+		            properties.put("Error", errors);
+		        }
+		        properties.put("Error", errors.toString());
+	        }
+		}
+		if (exit == 0) {
+		    properties.put('Status', 'Success');
+		}
+		else {
+		     properties.put('Status', 'Failure');
+		}
+     ]]></post-processing>
+    <command program="${GROOVY_HOME}/bin/groovy">
+      <arg value="-cp"/>
+      <arg path="classes:lib/groovy-plugin-utils-1.2.jar"/>
+      <arg file="ashell.groovy"/>
+      <arg file="${PLUGIN_INPUT_PROPS}"/>
+      <arg file="${PLUGIN_OUTPUT_PROPS}"/>
+    </command>
+  </step-type>
+
+  <step-type name="Apt">
+    <description>apt command</description>
+    <properties>
+    	<property name="aptName" required="false">
+			<property-ui type="textBox" label="apt Name" description="apt name"/>
+		</property>
+    	<property name="pkg" required="false">
+			<property-ui type="textBox" label="pkg" description=""/>
+		</property>
+    	<property name="deb" required="false">
+			<property-ui type="textBox" label="deb" description=""/>
+		</property>
+    	<property name="state" required="false">
+			<property-ui type="textBox" label="state" description=""/>
+		</property>
+    	<property name="update_cache" required="false">
+			<property-ui type="textBox" label="update_cache" description=""/>
+		</property>
+		<property name="with_items" required="false">
+			<property-ui type="textAreaBox" label="with_items" description="with_items"/>
+		</property>
+	</properties>
+    <post-processing><![CDATA[
+		var exit = properties.get('exitCode');
+		if (exit == 0) {
+			scanner.register("FAILED! =>", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.register("failed:", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.register("The error appears", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.register("ERROR:", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.scan();
+			if (exit!=0) {
+			 	var errors = properties.get("Error");
+		        if (errors == null) {
+		            errors = new java.util.ArrayList();
+		            properties.put("Error", errors);
+		        }
+		        properties.put("Error", errors.toString());
+	        }
+		}
+		if (exit == 0) {
+		    properties.put('Status', 'Success');
+		}
+		else {
+		     properties.put('Status', 'Failure');
+		}
+     ]]></post-processing>
+    <command program="${GROOVY_HOME}/bin/groovy">
+      <arg value="-cp"/>
+      <arg path="classes:lib/groovy-plugin-utils-1.2.jar"/>
+      <arg file="apt.groovy"/>
+      <arg file="${PLUGIN_INPUT_PROPS}"/>
+      <arg file="${PLUGIN_OUTPUT_PROPS}"/>
+    </command>
+  </step-type>
+
+  <step-type name="Apt Key">
+    <description>apt key</description>
+    <properties>
+    	<property name="data" required="true">
+			<property-ui type="textBox" label="data" description="apt name"/>
+		</property>
+	</properties>
+    <post-processing><![CDATA[
+		var exit = properties.get('exitCode');
+		if (exit == 0) {
+			scanner.register("FAILED! =>", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.register("failed:", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.register("The error appears", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.register("ERROR:", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.scan();
+			if (exit!=0) {
+			 	var errors = properties.get("Error");
+		        if (errors == null) {
+		            errors = new java.util.ArrayList();
+		            properties.put("Error", errors);
+		        }
+		        properties.put("Error", errors.toString());
+	        }
+		}
+		if (exit == 0) {
+		    properties.put('Status', 'Success');
+		}
+		else {
+		     properties.put('Status', 'Failure');
+		}
+     ]]></post-processing>
+    <command program="${GROOVY_HOME}/bin/groovy">
+      <arg value="-cp"/>
+      <arg path="classes:lib/groovy-plugin-utils-1.2.jar"/>
+      <arg file="apt_key.groovy"/>
+      <arg file="${PLUGIN_INPUT_PROPS}"/>
+      <arg file="${PLUGIN_OUTPUT_PROPS}"/>
+    </command>
+  </step-type>
+
+
+  <step-type name="Line In File">
+    <description>lineinfile command</description>
+    <properties>
+    	<property name="dest" required="true">
+			<property-ui type="textBox" label="destination" description="destination"/>
+		</property>
+		<property name="regexp" required="false">
+			<property-ui type="textBox" label="regexp" description="regexp"/>
+		</property>
+		<property name="state" required="false">
+			<property-ui type="textBox" label="state" description="regexp"/>
+		</property>
+		<property name="line" required="true">
+			<property-ui type="textBox" label="line" description="line"/>
+		</property>
+		<property name="insertbefore" required="false">
+			<property-ui type="textBox" label="insertbefore" description="line"/>
+		</property>
+		<property name="with_items" required="false">
+			<property-ui type="textAreaBox" label="with_items" description="with_items"/>
+		</property>
+    </properties>
+    <post-processing><![CDATA[
+		var exit = properties.get('exitCode');
+		if (exit == 0) {
+			scanner.register("FAILED! =>", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.register("failed:", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.register("The error appears", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.register("ERROR:", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.scan();
+			if (exit!=0) {
+			 	var errors = properties.get("Error");
+		        if (errors == null) {
+		            errors = new java.util.ArrayList();
+		            properties.put("Error", errors);
+		        }
+		        properties.put("Error", errors.toString());
+	        }
+		}
+		if (exit == 0) {
+		    properties.put('Status', 'Success');
+		}
+		else {
+		     properties.put('Status', 'Failure');
+		}
+     ]]></post-processing>
+    <command program="${GROOVY_HOME}/bin/groovy">
+      <arg value="-cp"/>
+      <arg path="classes:lib/groovy-plugin-utils-1.2.jar"/>
+      <arg file="lineinfile.groovy"/>
+      <arg file="${PLUGIN_INPUT_PROPS}"/>
+      <arg file="${PLUGIN_OUTPUT_PROPS}"/>
+    </command>
+  </step-type>
+
+  <step-type name="Copy">
+    <description>copy command</description>
+    <properties>
+    	<property name="src" required="true">
+			<property-ui type="textBox" label="src" description=""/>
+		</property>
+		<property name="dest" required="true">
+			<property-ui type="textBox" label="dest" description=""/>
+		</property>
+		<property name="owner" required="false">
+			<property-ui type="textBox" label="owner" description=""/>
+		</property>
+		<property name="group" required="false">
+			<property-ui type="textBox" label="group" description=""/>
+		</property>
+		<property name="mode" required="false">
+			<property-ui type="textBox" label="mode" description=""/>
+		</property>
+		<property name="with_items" required="false">
+			<property-ui type="textAreaBox" label="with_items" description="with_items"/>
+		</property>
+    </properties>
+    <post-processing><![CDATA[
+		var exit = properties.get('exitCode');
+		if (exit == 0) {
+			scanner.register("FAILED! =>", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.register("failed:", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.register("The error appears", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.register("ERROR:", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.scan();
+			if (exit!=0) {
+			 	var errors = properties.get("Error");
+		        if (errors == null) {
+		            errors = new java.util.ArrayList();
+		            properties.put("Error", errors);
+		        }
+		        properties.put("Error", errors.toString());
+	        }
+		}
+		if (exit == 0) {
+		    properties.put('Status', 'Success');
+		}
+		else {
+		     properties.put('Status', 'Failure');
+		}
+     ]]></post-processing>
+    <command program="${GROOVY_HOME}/bin/groovy">
+      <arg value="-cp"/>
+      <arg path="classes:lib/groovy-plugin-utils-1.2.jar"/>
+      <arg file="copy.groovy"/>
+      <arg file="${PLUGIN_INPUT_PROPS}"/>
+      <arg file="${PLUGIN_OUTPUT_PROPS}"/>
+    </command>
+  </step-type>
+
+  <step-type name="Command">
+    <description>command command</description>
+    <properties>
+    	<property name="taskcommand" required="true">
+			<property-ui type="textBox" label="taskcommand" description=""/>
+		</property>
+    	<property name="creates" required="false">
+			<property-ui type="textBox" label="creates" description=""/>
+		</property>
+		<property name="environment" required="false">
+			<property-ui type="textAreaBox" label="environment" description=""/>
+		</property>
+		<property name="chdir" required="false">
+			<property-ui type="textBox" label="chdir" description=""/>
+		</property>
+		<property name="become" required="false">
+			<property-ui type="textBox" label="become" description=""/>
+		</property>
+    </properties>
+    <post-processing><![CDATA[
+		var exit = properties.get('exitCode');
+		if (exit == 0) {
+			scanner.register("FAILED! =>", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.register("failed:", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.register("The error appears", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.register("ERROR:", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.scan();
+			if (exit!=0) {
+			 	var errors = properties.get("Error");
+		        if (errors == null) {
+		            errors = new java.util.ArrayList();
+		            properties.put("Error", errors);
+		        }
+		        properties.put("Error", errors.toString());
+	        }
+		}
+		if (exit == 0) {
+		    properties.put('Status', 'Success');
+		}
+		else {
+		     properties.put('Status', 'Failure');
+		}
+     ]]></post-processing>
+    <command program="${GROOVY_HOME}/bin/groovy">
+      <arg value="-cp"/>
+      <arg path="classes:lib/groovy-plugin-utils-1.2.jar"/>
+      <arg file="command.groovy"/>
+      <arg file="${PLUGIN_INPUT_PROPS}"/>
+      <arg file="${PLUGIN_OUTPUT_PROPS}"/>
+    </command>
+  </step-type>
+
+  <step-type name="Pip">
+    <description>pip command</description>
+    <properties>
+    	<property name="name" required="true">
+			<property-ui type="textBox" label="name" description=""/>
+		</property>
+    	<property name="state" required="false">
+			<property-ui type="textBox" label="state" description=""/>
+		</property>
+		<property name="with_items" required="false">
+			<property-ui type="textAreaBox" label="with_items" description="with_items"/>
+		</property>
+    </properties>
+    <post-processing><![CDATA[
+		var exit = properties.get('exitCode');
+		if (exit == 0) {
+			scanner.register("FAILED! =>", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.register("failed:", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.register("The error appears", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.register("ERROR:", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.scan();
+			if (exit!=0) {
+			 	var errors = properties.get("Error");
+		        if (errors == null) {
+		            errors = new java.util.ArrayList();
+		            properties.put("Error", errors);
+		        }
+		        properties.put("Error", errors.toString());
+	        }
+		}
+		if (exit == 0) {
+		    properties.put('Status', 'Success');
+		}
+		else {
+		     properties.put('Status', 'Failure');
+		}
+     ]]></post-processing>
+    <command program="${GROOVY_HOME}/bin/groovy">
+      <arg value="-cp"/>
+      <arg path="classes:lib/groovy-plugin-utils-1.2.jar"/>
+      <arg file="pip.groovy"/>
+      <arg file="${PLUGIN_INPUT_PROPS}"/>
+      <arg file="${PLUGIN_OUTPUT_PROPS}"/>
+    </command>
+  </step-type>
+
+   <step-type name="Shell">
+    <description>shell command</description>
+    <properties>
+    	<property name="shell" required="true">
+			<property-ui type="textBox" label="shell" description=""/>
+		</property>
+    	<property name="async" required="false">
+			<property-ui type="textBox" label="async" description=""/>
+		</property>
+    	<property name="poll" required="false">
+			<property-ui type="textBox" label="poll" description=""/>
+		</property>
+		<property name="chdir" required="false">
+			<property-ui type="textBox" label="chdir" description=""/>
+		</property>
+    </properties>
+    <post-processing><![CDATA[
+		var exit = properties.get('exitCode');
+		if (exit == 0) {
+			scanner.register("FAILED! =>", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.register("failed:", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.register("The error appears", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.register("ERROR:", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.scan();
+			if (exit!=0) {
+			 	var errors = properties.get("Error");
+		        if (errors == null) {
+		            errors = new java.util.ArrayList();
+		            properties.put("Error", errors);
+		        }
+		        properties.put("Error", errors.toString());
+	        }
+		}
+		if (exit == 0) {
+		    properties.put('Status', 'Success');
+		}
+		else {
+		     properties.put('Status', 'Failure');
+		}
+     ]]></post-processing>
+    <command program="${GROOVY_HOME}/bin/groovy">
+      <arg value="-cp"/>
+      <arg path="classes:lib/groovy-plugin-utils-1.2.jar"/>
+      <arg file="shell.groovy"/>
+      <arg file="${PLUGIN_INPUT_PROPS}"/>
+      <arg file="${PLUGIN_OUTPUT_PROPS}"/>
+    </command>
+  </step-type>
+
+  <step-type name="Service">
+    <description>service command</description>
+    <properties>
+    	<property name="name" required="true">
+			<property-ui type="textBox" label="name" description=""/>
+		</property>
+    	<property name="enabled" required="false">
+			<property-ui type="textBox" label="enabled" description=""/>
+		</property>
+    	<property name="state" required="false">
+			<property-ui type="textBox" label="state" description=""/>
+		</property>
+    </properties>
+    <post-processing><![CDATA[
+		var exit = properties.get('exitCode');
+		if (exit == 0) {
+			scanner.register("FAILED! =>", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.register("failed:", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.register("The error appears", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.register("ERROR:", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.scan();
+			if (exit!=0) {
+			 	var errors = properties.get("Error");
+		        if (errors == null) {
+		            errors = new java.util.ArrayList();
+		            properties.put("Error", errors);
+		        }
+		        properties.put("Error", errors.toString());
+	        }
+		}
+		if (exit == 0) {
+		    properties.put('Status', 'Success');
+		}
+		else {
+		     properties.put('Status', 'Failure');
+		}
+     ]]></post-processing>
+    <command program="${GROOVY_HOME}/bin/groovy">
+      <arg value="-cp"/>
+      <arg path="classes:lib/groovy-plugin-utils-1.2.jar"/>
+      <arg file="service.groovy"/>
+      <arg file="${PLUGIN_INPUT_PROPS}"/>
+      <arg file="${PLUGIN_OUTPUT_PROPS}"/>
+    </command>
+  </step-type>
+
+
+  <step-type name="File">
+    <description>file command</description>
+    <properties>
+    	<property name="path" required="false">
+			<property-ui type="textBox" label="path" description=""/>
+		</property>
+    	<property name="recurse" required="false">
+			<property-ui type="textBox" label="recurse" description=""/>
+		</property>
+    	<property name="src" required="false">
+			<property-ui type="textBox" label="src" description=""/>
+		</property>
+    	<property name="dest" required="false">
+			<property-ui type="textBox" label="dest" description=""/>
+		</property>
+    	<property name="state" required="false">
+			<property-ui type="textBox" label="state" description=""/>
+		</property>
+    	<property name="owner" required="false">
+			<property-ui type="textBox" label="owner" description=""/>
+		</property>
+    	<property name="group" required="false">
+			<property-ui type="textBox" label="group" description=""/>
+		</property>
+    	<property name="mode" required="false">
+			<property-ui type="textBox" label="mode" description=""/>
+		</property>
+		<property name="with_items" required="false">
+			<property-ui type="textAreaBox" label="with_items" description="with_items"/>
+		</property>
+    </properties>
+    <post-processing><![CDATA[
+		var exit = properties.get('exitCode');
+		if (exit == 0) {
+			scanner.register("FAILED! =>", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.register("failed:", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.register("The error appears", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.register("ERROR:", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.scan();
+			if (exit!=0) {
+			 	var errors = properties.get("Error");
+		        if (errors == null) {
+		            errors = new java.util.ArrayList();
+		            properties.put("Error", errors);
+		        }
+		        properties.put("Error", errors.toString());
+	        }
+		}
+		if (exit == 0) {
+		    properties.put('Status', 'Success');
+		}
+		else {
+		     properties.put('Status', 'Failure');
+		}
+     ]]></post-processing>
+    <command program="${GROOVY_HOME}/bin/groovy">
+      <arg value="-cp"/>
+      <arg path="classes:lib/groovy-plugin-utils-1.2.jar"/>
+      <arg file="file.groovy"/>
+      <arg file="${PLUGIN_INPUT_PROPS}"/>
+      <arg file="${PLUGIN_OUTPUT_PROPS}"/>
+    </command>
+  </step-type>
+
+  <step-type name="Unarchive">
+    <description>unarchive command</description>
+    <properties>
+    	<property name="src" required="true">
+			<property-ui type="textBox" label="src" description=""/>
+		</property>
+    	<property name="dest" required="true">
+			<property-ui type="textBox" label="dest" description=""/>
+		</property>
+    	<property name="copy" required="false">
+			<property-ui type="textBox" label="copy" description=""/>
+		</property>
+    	<property name="creates" required="false">
+			<property-ui type="textBox" label="creates" description=""/>
+		</property>
+    	<property name="owner" required="false">
+			<property-ui type="textBox" label="owner" description=""/>
+		</property>
+    	<property name="group" required="false">
+			<property-ui type="textBox" label="group" description=""/>
+		</property>
+		<property name="become" required="false">
+			<property-ui type="textBox" label="become" description=""/>
+		</property>
+    </properties>
+    <post-processing><![CDATA[
+		var exit = properties.get('exitCode');
+		if (exit == 0) {
+			scanner.register("FAILED! =>", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.register("failed:", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.register("The error appears", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.register("ERROR:", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.scan();
+			if (exit!=0) {
+			 	var errors = properties.get("Error");
+		        if (errors == null) {
+		            errors = new java.util.ArrayList();
+		            properties.put("Error", errors);
+		        }
+		        properties.put("Error", errors.toString());
+	        }
+		}
+		if (exit == 0) {
+		    properties.put('Status', 'Success');
+		}
+		else {
+		     properties.put('Status', 'Failure');
+		}
+     ]]></post-processing>
+    <command program="${GROOVY_HOME}/bin/groovy">
+      <arg value="-cp"/>
+      <arg path="classes:lib/groovy-plugin-utils-1.2.jar"/>
+      <arg file="unarchive.groovy"/>
+      <arg file="${PLUGIN_INPUT_PROPS}"/>
+      <arg file="${PLUGIN_OUTPUT_PROPS}"/>
+    </command>
+  </step-type>
+
+  <step-type name="Get Url">
+    <description>get_url command</description>
+    <properties>
+    	<property name="url" required="true">
+			<property-ui type="textBox" label="url" description=""/>
+		</property>
+    	<property name="dest" required="true">
+			<property-ui type="textBox" label="dest" description=""/>
+		</property>
+    	<property name="checksum" required="false">
+			<property-ui type="textBox" label="checksum" description=""/>
+		</property>
+    	<property name="owner" required="false">
+			<property-ui type="textBox" label="owner" description=""/>
+		</property>
+    	<property name="group" required="false">
+			<property-ui type="textBox" label="group" description=""/>
+		</property>
+    	<property name="mode" required="false">
+			<property-ui type="textBox" label="mode" description=""/>
+		</property>
+    </properties>
+    <post-processing><![CDATA[
+		var exit = properties.get('exitCode');
+		if (exit == 0) {
+			scanner.register("FAILED! =>", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.register("failed:", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.register("The error appears", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.register("ERROR:", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.scan();
+			if (exit!=0) {
+			 	var errors = properties.get("Error");
+		        if (errors == null) {
+		            errors = new java.util.ArrayList();
+		            properties.put("Error", errors);
+		        }
+		        properties.put("Error", errors.toString());
+	        }
+		}
+		if (exit == 0) {
+		    properties.put('Status', 'Success');
+		}
+		else {
+		     properties.put('Status', 'Failure');
+		}
+     ]]></post-processing>
+    <command program="${GROOVY_HOME}/bin/groovy">
+      <arg value="-cp"/>
+      <arg path="classes:lib/groovy-plugin-utils-1.2.jar"/>
+      <arg file="get_url.groovy"/>
+      <arg file="${PLUGIN_INPUT_PROPS}"/>
+      <arg file="${PLUGIN_OUTPUT_PROPS}"/>
+    </command>
+  </step-type>
+
+  <step-type name="Get Built-in Ansible Properties">
+    <description>Read Built-in Ansible Properties</description>
+    <properties>
+    	<property name="queryKey" required="true">
+			<property-ui type="textBox" label="Query Key" description="query key can be ansible_lsb"/>
+		</property>
+    	<property name="resultKey" required="true">
+			<property-ui type="textBox" label="Result Key" description="result key can be codename for ansible_lsb.codename"/>
+		</property>
+    </properties>
+    <post-processing><![CDATA[
+		var exit = properties.get('exitCode');
+		if (exit == 0) {
+			scanner.register("FAILED! =>", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.register("failed:", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.register("The error appears", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.register("ERROR:", function(lineNumber, line) {
+			     exit=1;
+			});
+			scanner.register("AnsibleVariable=", function(lineNumber, line) {
+			     properties.put('result', line.substring(16,line.length));
+			});
+			scanner.scan();
+			if (exit!=0) {
+			 	var errors = properties.get("Error");
+		        if (errors == null) {
+		            errors = new java.util.ArrayList();
+		            properties.put("Error", errors);
+		        }
+		        properties.put("Error", errors.toString());
+	        }
+		}
+		if (exit == 0) {
+		    properties.put('Status', 'Success');
+		}
+		else {
+		     properties.put('Status', 'Failure');
+		}
+     ]]></post-processing>
+    <command program="${GROOVY_HOME}/bin/groovy">
+      <arg value="-cp"/>
+      <arg path="classes:lib/groovy-plugin-utils-1.2.jar"/>
+      <arg file="getBuiltinAnsibleProperties.groovy"/>
+      <arg file="${PLUGIN_INPUT_PROPS}"/>
+      <arg file="${PLUGIN_OUTPUT_PROPS}"/>
+    </command>
+  </step-type>
+</plugin>
