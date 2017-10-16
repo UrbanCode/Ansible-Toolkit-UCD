@@ -1,0 +1,25 @@
+language: groovy
+rvm:
+- 1.8.8
+install:
+- gradle build
+before_script:
+- gradle test
+- export VERSION=${TRAVIS_TAG}.${TRAVIS_COMMIT:0:7}
+script:
+- gradle -PpluginVersion=${VERSION}
+jdk:
+- oraclejdk8
+- openjdk7
+notifications:
+  email: false
+deploy:
+  provider: releases
+  api_key:
+    secure: MCRxe5yb9c1HqIADLcEp/bwA+nBxeoRIQYLeBqyQQAwtIGd2q49ffSwrhWxxXv62j4OeMVYi+9Z/HEVx6ct2sQ2F/uuw+9WHZsdv6lF4SmOezeG1avKlTn7EvOd4oqHqtGNHebZLEfrzYRY4DPydOmbD/fL7YEf2ClaKED/m0RKOXqxs7IANDTZS/XemE5ORLpR1urAVKh2M/Yno5fS/LU34/8mu5RJiQfhbTb70Kqq5TXuNaVhsavkIWSPoE/jnR5+ujSf4KMkiOX2ztnwh03cV5VFHghA/z/wVuB6o9i0OeFEUcBWt3PA+5Dg6llPaRqPnWQS993Kvdz1EmWtbz0755T9J3grDomygP+MJeCSNS4iA1kjtAuH+0rK5aex9wry2Xk2rObU21qUu7de4POvohIA3eRoWm6zcN4Ut/EGCKTBRAasPsBLVdl2mOPgl8MKN/Ks+KY86kco3OwEZaMBBWDSEhkfFEZWQ7PMrNg9VFm6w39Q/Tj2dm5kERuYP9nc1WRAwWYyQyjbsyEVAVwtle+fFcWnNW0gUlqFaLw3xzL+uKcQsKttS0U/Saza0vHD/VrFmePc/Yoc0x7CjHbxB5ELxk9TfBTttsYNuiB0+NkQmQXNE8N8hlFZwL08KlrsEpFLMbTv1tg+lPQev9IRxkBve5XCKHk5AU+t7Kmo=
+  file_glob: true
+  file: build/distributions/*.zip
+  skip_cleanup: true
+  on:
+    tags: true
+    repo: IBM-UrbanCode/Ansible-Toolkit-UCD
