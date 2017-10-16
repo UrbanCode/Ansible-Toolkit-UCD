@@ -25,4 +25,6 @@
         <migrate-command name="Get Url" old="get_url"/>
         <migrate-command name="Get Built-in Ansible Properties" old="getBuiltinAnsibleProperties"/>
     </migrate>
+    <migrate to-version="53">
+    </migrate>
 </plugin-upgrade>

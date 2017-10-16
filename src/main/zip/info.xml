@@ -112,7 +112,7 @@
   </meta-html>
 
   <!-- Do not change the release-version, the build process injects it. -->
-  <release-version>52</release-version>
+  <release-version>@RELEASE_VERSION@</release-version>
 
   <release-notes>
     <!--
@@ -133,6 +133,9 @@
 
       <release-note plugin-version="52">
       Initial Release
+      </release-note>
+      <release-note plugin-version="53">
+      The Ansible Toolkit is now built through Gradle. All Ant and Ivy build pieces have been removed.
       </release-note>
   </release-notes>
 </pluginInfo>
