@@ -1,0 +1,65 @@
+name: Gradle CD
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+
+  create-release:
+
+    permissions: write-all
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '8'
+          distribution: 'adopt-openj9'
+
+      - name: Set up Git
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Fetch all tags
+        run: git fetch --tags
+
+      - name: Determine next tag version
+        id: getNextTag
+        run: |
+          # Get version from plugin.xml
+          pluginXmlVersion=$(grep -oP '<identifier .* version="\K[^"]+' src/main/zip/plugin.xml)
+          echo "pluginXmlVersion is $pluginXmlVersion"
+
+          # Get the latest tag
+          latestTag=$(git describe --tags $(git rev-list --tags --max-count=1))
+          echo "latestTag is $latestTag"
+
+          # Determine next tag
+          if awk "BEGIN {exit !( $latestTag < $pluginXmlVersion )}"; then
+            nextTag="$pluginXmlVersion.0"
+          else
+            nextTag=$(awk "BEGIN {print $latestTag + 0.1}")
+          fi
+
+          echo "nextTag is $nextTag"
+          echo "value=$nextTag" >> $GITHUB_OUTPUT
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+
+      - name: Create dist
+        run: ./gradlew "-PpluginVersion=${{ steps.getNextTag.outputs.value }}" distPlugin
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.getNextTag.outputs.value }}
+          files: "build/distributions/*.zip"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
