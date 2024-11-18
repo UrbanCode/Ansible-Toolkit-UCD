@@ -1,11 +1,12 @@
+import com.urbancode.air.plugin.tool.AirPluginTool
+
 /**
- *  © Copyright IBM Corporation 2016, 2017.
+ *  © Copyright IBM Corporation 2016, 2024.
  *  This is licensed under the following license.
  *  The Eclipse Public 1.0 License (http://www.eclipse.org/legal/epl-v10.html)
  *  U.S. Government Users Restricted Rights:  Use, duplication or disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
  */
 
-import com.urbancode.air.AirPluginTool;
 
 def apTool = new AirPluginTool(this.args[0], this.args[1]) //assuming that args[0] is input props file and args[1] is output props file
 

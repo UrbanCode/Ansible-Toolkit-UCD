@@ -137,5 +137,8 @@
       <release-note plugin-version="53">
       The Ansible Toolkit is now built through Gradle. All Ant and Ivy build pieces have been removed.
       </release-note>
+      <release-note plugin-version="54">
+        Added support for Groovy 3 version
+      </release-note>
   </release-notes>
 </pluginInfo>
