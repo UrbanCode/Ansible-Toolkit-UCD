@@ -48,7 +48,7 @@ def buildUtilDir   = 'build/util'
 
 configurations {
     // Remove the groovy-all jar from runtime dependencies
-    runtime.exclude module: 'groovy-all'
+    runtimeClasspath.exclude module: 'groovy-all'
 }
 
 repositories {
@@ -60,13 +60,13 @@ repositories {
 
 dependencies {
     // groovy-plugin-utils pulls down groovy-all as a transitive dependency for the 'compile' configuration
-    compile 'com.ibm.urbancode.plugins:groovy-plugin-utils:+'
-    compile 'com.ibm.urbancode.util:i18n-scraper:+'
+    implementation 'com.ibm.urbancode.plugins:groovy-plugin-utils:+'
+    implementation 'com.ibm.urbancode.util:i18n-scraper:+'
 
     // This compiles the i18n-scraper script
-    compile localGroovy()
-    testCompile 'junit:junit:4.11'
-    testCompile 'org.hamcrest:hamcrest-core:1.3'
+    implementation localGroovy()
+    testImplementation 'junit:junit:4.11'
+    testImplementation 'org.hamcrest:hamcrest-core:1.3'
 }
 
 sourceSets {
@@ -97,7 +97,7 @@ compileGroovy {
 task copyDeps(type: Copy) {
     into 'lib'
     copy {
-        from configurations.runtime
+        from configurations.runtimeClasspath
         include { target ->
             return target.file.path.contains("com.ibm.urbancode")
         }
@@ -107,7 +107,7 @@ task copyDeps(type: Copy) {
         }
     }
     copy {
-        from configurations.runtime
+        from configurations.runtimeClasspath
         exclude { target ->
             return target.file.path.contains("com.ibm.urbancode")
         }
@@ -151,9 +151,9 @@ task distPlugin(type: Zip, dependsOn: ['compileGroovy', 'gatherI18n']) {
         exclude 'META-INF', 'i18n-scraper.groovy'
     }
     if (pluginVersion) {
-        archiveName = "${pluginName}-v${pluginVersion}.zip"
+        archiveFileName = "${pluginName}-v${pluginVersion}.zip"
     } else {
-        archiveName = "${pluginName}-dev.zip"
+        archiveFileName = "${pluginName}-dev.zip"
     }
 }
 
