@@ -27,4 +27,6 @@
     </migrate>
     <migrate to-version="53">
     </migrate>
+    <migrate to-version="54">
+    </migrate>
 </plugin-upgrade>
