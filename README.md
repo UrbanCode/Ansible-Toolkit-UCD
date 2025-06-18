@@ -1,3 +1,5 @@
+> ⚠️ **Important:** The codebase of the plugin has been moved to internal enterprise GitHub. Further enhancements and bug fixes will be made there. We recommend using the plugin [Link to Download](https://urbancode.github.io/IBM-UCx-PLUGIN-DOCS/UCD/ansible/). Please create an RFE(Request For Enhancement) if you find any feature missing.
+
 # IBM UrbanCode Deploy - Ansible Toolkit Plug-in [![Build Status](https://travis-ci.org/IBM-UrbanCode/Ansible-Toolkit-UCD.svg?branch=master)](https://travis-ci.org/IBM-UrbanCode/Ansible-Toolkit-UCD)
 ---
 Note: This is not the plugin distributable! This is the source code. To find the installable plugin, go into the 'Releases' tab, and download a stable version.

@@ -8,7 +8,7 @@
 
 <plugin xmlns="http://www.urbancode.com/PluginXMLSchema_v1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <header>
-    <identifier id="com.urbancode.air.plugin.AnsibleToolkit" name="AnsibleToolkit" version="54"/>
+    <identifier id="com.urbancode.air.plugin.AnsibleToolkitPublic" name="AnsibleToolkit" version="54"/>
     <description>
       This plug-in includes steps that integrate with Ansible.
       </description>
