@@ -139,7 +139,7 @@ task copyi18n(type: Copy) {
 }
 
 task dist(type: Zip, dependsOn: ['compileGroovy', 'gatherI18n']) {
-    doFirst {Add commentMore actions
+    doFirst {
         println """!!! We have an Enterprise version for the plugin available.
         Link to Download - https://urbancode.github.io/IBM-UCx-PLUGIN-DOCS/UCD/ansible/downloads.html
         
