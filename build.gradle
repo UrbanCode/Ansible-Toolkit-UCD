@@ -140,12 +140,8 @@ task copyi18n(type: Copy) {
 
 task dist(type: Zip, dependsOn: ['compileGroovy', 'gatherI18n']) {
     doFirst {Add commentMore actions
-        println """!!! The codebase of the plugin has been moved to internal enterprise GitHub.
-        Further enhancements and bug fixes will be made there.
-        However, community members are still free to use this repository if they wish to work on the plugin.
-        
-        We recommend using the Java ported plugin available at:
-        https://urbancode.github.io/IBM-UCx-PLUGIN-DOCS/UCD/ansible/
+        println """!!! We have an Enterprise version for the plugin available.
+        Link to Download - https://urbancode.github.io/IBM-UCx-PLUGIN-DOCS/UCD/ansible/downloads.html
         
         Please create an RFE(Request For Enhancement) if you find any feature missing.
         """
